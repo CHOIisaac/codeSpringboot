@@ -7,9 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.Commit;
 import org.zerock.ex2.entity.Memo;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -109,16 +111,43 @@ class MemoRepositoryTest {
 
     @Test
     public void testSort(){
-        Sort sort1 = Sort.by("mno").descending();
-        Sort sort2 = Sort.by("memoText").ascending();
+        Sort sort1 = Sort.by("mno").ascending();
+        Sort sort2 = Sort.by("memoText").descending();
         Sort sortAll = sort1.and(sort2);
 
-        Pageable pageable = PageRequest.of(0, 10, sortAll);
+        Pageable pageable = PageRequest.of(0, 10, sortAll);// 1페이지에서 10개 출력
 
         Page<Memo> result = memoRepository.findAll(pageable);
 
         result.get().forEach(memo -> {
             System.out.println(memo);
         });
+    }
+
+    // Query test
+    @Test
+    public void testQueryMethods(){
+
+        List<Memo> list = memoRepository.findByMnoBetweenOrderByMnoDesc(70L, 80L); // 70~80 descending
+
+        for(Memo memo : list){
+            System.out.println(memo);
+        }
+    }
+
+    @Test
+    public void testQueryMethodWithPageable(){
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("mno").descending()); // 1페이지에서 10개 디센 설정하겠다
+        Page<Memo> result = memoRepository.findByMnoBetween(10L, 50L, pageable); // 10~ 50 디센딩 역순 출력 (pageable -> 10개 )
+
+        result.get().forEach(memo -> System.out.println(memo));
+    }
+
+    @Commit
+    @Transactional
+    @Test
+    public void testDeleteQueryMethod(){
+        memoRepository.deleteMemoByMnoLessThan(10L); // 10보다 작은 mno삭제
     }
 }
