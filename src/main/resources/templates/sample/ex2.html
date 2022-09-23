@@ -14,6 +14,9 @@
         <li th:each="dto, state : ${list}" th:class="${dto.sno % 5 == 0} ? 'target'" th:text="${dto}">
 <!--            <span th:if="${dto.sno % 5 == 0}" th:text="${'&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;'+dto.sno}"></span>-->
 <!--            <span th:unless="${dto.sno % 5 == 0}" th:text="${dto.first}"></span>-->
+        <li th:each="dto, state : ${list}" th:if="${dto.sno % 5 == 0}">
+
+            [[${dto}]]
         </li>
     </ul>
 </body>
