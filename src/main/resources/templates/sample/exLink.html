@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymelaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <li th:each="dto : ${list}" >
+        <a th:href="@{/sample/exView(sno=${dto.sno})}">[[${dto}]]</a>
+    </li>
+
+</body>
+</html>
