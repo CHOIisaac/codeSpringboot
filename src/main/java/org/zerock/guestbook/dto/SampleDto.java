@@ -1,4 +1,4 @@
-package org.zerock.ex2.dto;
+package org.zerock.guestbook.dto;
 
 import lombok.Builder;
 import lombok.Data;

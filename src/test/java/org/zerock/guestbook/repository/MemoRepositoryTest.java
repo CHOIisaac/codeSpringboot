@@ -1,4 +1,4 @@
-package org.zerock.ex2.repository;
+package org.zerock.guestbook.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Commit;
-import org.zerock.ex2.entity.Memo;
+import org.zerock.guestbook.entity.Memo;
 
 import javax.transaction.Transactional;
 import java.util.List;

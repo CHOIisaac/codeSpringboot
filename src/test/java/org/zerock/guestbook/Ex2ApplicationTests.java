@@ -1,4 +1,4 @@
-package org.zerock.ex2;
+package org.zerock.guestbook;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

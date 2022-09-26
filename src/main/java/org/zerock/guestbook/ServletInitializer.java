@@ -1,4 +1,4 @@
-package org.zerock.ex2;
+package org.zerock.guestbook;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
