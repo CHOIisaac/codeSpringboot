@@ -17,6 +17,7 @@ import org.zerock.guestbook.service.GuestbookService;
 public class GuestbookController {
 
     private final GuestbookService service;
+    private long gno;
 
     @GetMapping("/")
     public String index(){
@@ -47,8 +48,8 @@ public class GuestbookController {
     }
 
     @GetMapping({"/read", "/modify"})
-        public void read(long gno, @ModelAttribute("requestDTO") PageRequestDTO requestDTO, Model model){
-            log.info("gno: "+gno);
+        public void read(Long gno, @ModelAttribute("requestDTO") PageRequestDTO requestDTO, Model model){
+        log.info("gno: "+gno);
 
             GuestbookDTO dto = service.read(gno);
 
@@ -62,5 +63,18 @@ public class GuestbookController {
         redirectAttributes.addFlashAttribute("msg", gno);
 
         return "redirect:/guestbook/list";
+    }
+
+    @PostMapping("/modify")
+    public String modify(GuestbookDTO dto, @ModelAttribute("requestDTO") PageRequestDTO requestDTO, RedirectAttributes redirectAttributes){
+        log.info("post modify...........................................");
+        log.info("dto: "+dto);
+
+        service.modify(dto);
+        System.out.println(dto.getGno()+"111dasdasdasdasdasdasdasdsadasdsad");
+        redirectAttributes.addFlashAttribute("page", requestDTO.getPage());
+        redirectAttributes.addFlashAttribute("gno", dto.getGno());
+
+        return "redirect:/guestbook/read";
     }
 }

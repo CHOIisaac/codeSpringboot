@@ -1,32 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" >
-<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
 
     <head>
     <meta charset="UTF-8">
     <title>Modify</title>
 
-    <script th:inline="javascript">
-
-        var actionForm = $("form"); //form 태그 객체
-
-        $(".removeBtn").click(function(){
-
-            actionForm
-                .attr("action", "/guestbook/remove")
-                .attr("method","post");
-
-            actionForm.submit();
-        });
-
-    </script>
     </head>
-    <body>
 
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+    <body>
+    <th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
     <th:block th:fragment="content">
     <h1 class="mt-4">Modify Page</h1>
 
-    <form action="/guestbook/modify" method="post">
+    <form id="form" action="/guestbook/modify" method="post">
+
+        <input type="hidden" name="page" th:value="${requestDTO.page}">
 
     <div class="form-group">
         <label>Gno</label>
@@ -67,8 +59,42 @@
 
     <button type="button" class="btn btn-danger removeBtn">Remove</button>
 
+        <script th:inline="javascript">
+
+            var actionForm = $("form");
+
+            $(".removeBtn").click(function(){
+
+                console.log("asdasdasd");
+
+                actionForm
+                    .attr("action", "/guestbook/remove")
+                    .attr("method","post");
+                actionForm.submit();
+
+            });
+
+            $(".modifyBtn").click(function(){
+                if(!confirm("수정하시겠습니까?")){
+                    return;
+                }
+                actionForm.attr("action", "/guestbook/modify").attr("method","post").submit();
+            });
+
+            $(".listBtn").click(function (){
+                var pageInfo = $("input[name='page']");
+
+                actionForm.empty();
+                actionForm.append(pageInfo);
+                actionForm.attr("action","/guestbook/list").attr("method", "get");
+                console.log(actionForm.html()+"asdasdasdadasdasdasd");
+                actionForm.submit();
+            });
+
+        </script>
+
 </th:block>
 
-</body>
 </th:block>
+    </body>
 </html>
