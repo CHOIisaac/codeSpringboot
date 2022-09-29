@@ -50,7 +50,7 @@ public class GuestbookServiceImpl implements GuestbookService{
     }
 
     @Override
-    public GuestbookDTO read(Long gno){
+    public GuestbookDTO read(long gno){
         Optional<Guestbook> result = repository.findById(gno);
         return  result.isPresent() ? entityToDto(result.get()) : null;
     }

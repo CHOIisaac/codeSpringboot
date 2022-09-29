@@ -50,7 +50,7 @@ public class GuestbookController {
     @GetMapping({"/read", "/modify"})
         public void read(long gno, @ModelAttribute("requestDTO") PageRequestDTO requestDTO, Model model){
         log.info("gno: "+gno);
-
+        System.out.println(gno+"aaaaaaaaalalalalalalalalalalalalal");
             GuestbookDTO dto = service.read(gno);
 
             model.addAttribute("dto", dto);
@@ -75,7 +75,7 @@ public class GuestbookController {
         redirectAttributes.addFlashAttribute("page", requestDTO.getPage());
         redirectAttributes.addFlashAttribute("type", requestDTO.getType());
         redirectAttributes.addFlashAttribute("keyword", requestDTO.getKeyword());
-        redirectAttributes.addFlashAttribute("gno", dto.getGno());
+        redirectAttributes.addFlashAttribute("dto", dto);
 
         return "redirect:/guestbook/read";
     }

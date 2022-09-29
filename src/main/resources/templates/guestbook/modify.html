@@ -16,7 +16,7 @@
     <th:block th:fragment="content">
     <h1 class="mt-4">Modify Page</h1>
 
-    <form id="form" action="/guestbook/modify" method="post">
+    <form action="/guestbook/modify" method="post">
 
         <input type="hidden" name="page" th:value="${requestDTO.page}">
         <input type="hidden" name="type" th:value="${requestDTO.type}">
