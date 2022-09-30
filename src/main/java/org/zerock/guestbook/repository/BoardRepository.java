@@ -3,6 +3,7 @@ package org.zerock.guestbook.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.zerock.guestbook.entity.Board;
@@ -30,4 +31,9 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
             " LEFT OUTER JOIN Reply r ON r.board = b "+
             " WHERE b.bno = :bno")
     Object getBoardByBno(@Param("bno") Long bno);
+
+    @Modifying
+    @Query("delete from Reply r where r.board.bno =:bno ")
+    void deleteByBno(Long bno);
+
 }
