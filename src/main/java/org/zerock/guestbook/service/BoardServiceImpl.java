@@ -2,7 +2,6 @@ package org.zerock.guestbook.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ import org.zerock.guestbook.repository.BoardRepository;
 import org.zerock.guestbook.repository.ReplyRepository;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -58,19 +56,19 @@ public class BoardServiceImpl implements BoardService{
     @Transactional
     @Override
     public void removeWithReplies(Long bno){
-        replyRepository.deleteById(bno);
+        replyRepository.deleteByBno(bno);
+        repository.deleteById(bno);
     }
 
+    @Transactional
     @Override
     public void modify(BoardDTO boardDTO){
-        Optional<Board> result = repository.findById(boardDTO.getBno());
+         Board board = repository.getOne(boardDTO.getBno());
+        log.info("baord: "+board);
 
-        if(result != null){
-            Board board = result.get();
             board.changeTitle(boardDTO.getTitle());
             board.changeContent(boardDTO.getContent());
             repository.save(board);
 
-        }
     }
 }
