@@ -15,6 +15,7 @@ import org.zerock.guestbook.repository.BoardRepository;
 import org.zerock.guestbook.repository.ReplyRepository;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -26,7 +27,7 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public Long register(BoardDTO dto){
-        log.info(dto);
+        log.info("dtodtodto "+dto);
 
         Board board = dtoToEntity(dto);
         repository.save(board);
@@ -39,7 +40,9 @@ public class BoardServiceImpl implements BoardService{
 
         Function<Object[], BoardDTO> fn = (en -> entityToDTO((Board) en[0], (Member) en[1], (Long) en[2] ));
 
-        Page<Object[]> result = repository.getBoardWithReplyCount(pageRequestDTO.getPageable(Sort.by("bno").descending()));
+//        Page<Object[]> result = repository.getBoardWithReplyCount(pageRequestDTO.getPageable(Sort.by("bno").descending()));
+        Page<Object[]> result = repository.searchPage(pageRequestDTO.getType(), pageRequestDTO.getKeyword(),
+                pageRequestDTO.getPageable(Sort.by("bno").descending()));
 
         return new PageResultDTO<>(result, fn);
     }
@@ -60,9 +63,10 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public void modify(BoardDTO boardDTO){
-        Board board = repository.getOne(boardDTO.getBno());
+        Optional<Board> result = repository.findById(boardDTO.getBno());
 
-        if(board != null){
+        if(result != null){
+            Board board = result.get();
             board.changeTitle(boardDTO.getTitle());
             board.changeContent(boardDTO.getContent());
             repository.save(board);
