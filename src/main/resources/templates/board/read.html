@@ -123,32 +123,101 @@
         $(".replyCount").click(function (){
             loadJSONData();
         });
-    });
 
-    // ---Modal---
-    var modal = $('.modal');
+        // 댓글 클릭 시 보여주기
+        $('.replyList').on("click", ".card-body", function (){
+            var rno = $(this).data("rno");
 
-    $(".addReply").click(function (){
-        modal.modal('show');
+            $("input[name='replyText']").val($(this).find('.card-title').html());
+            $("input[name='replyer']").val($(this).find('.card-subtitle').html());
+            $("input[name='rno']").val(rno);
 
-        //댓글 입력하는 부분 초기화
-        $('input[name="replyText"]').val('');
-        $('input[name="replyer"]').val('');
+            $(".modal-footer .btn").hide();
+            $(".replyRemove, .replyModify, .replyClose").show();
+            modal.modal('show');
+        });
 
-        $(".modal-footer .btn").hide(); //모달 내의 모든 버튼 안 보이게
-        $(".replySave, .replyClose").show(); // 필요한 버튼만 보이게
-    });
-    $(".replySave").click(function (){
-        var reply = {
-            bno : bno,
-            text : $('input[name="replyText"]').val(),
-            replyer : $('input[name="replyer"]').val()
-        }
-        console.log(reply);
+        //  댓글 삭제
+        $(".replyRemove").on("click", function (){
+            var rno = $("input[name='rno']").val(); // 모달창에 보이는 댓글 번호 hidden 처리 되어 있음
 
-        $.ajax({
-
+            $.ajax({
+                url : '/replies/' + rno,
+                method : 'delete',
+                success : function (result){
+                    console.log("result: "+result);
+                    if(result === 'success'){
+                        alert("댓글이 삭제되었습니다.");
+                        modal.modal('hide');
+                        loadJSONData();
+                    }
+                }
+            })
         })
+
+        // ---Modal---
+        var modal = $('.modal');
+
+        // addReply버튼 눌렀을 때 모달창 보여주기
+        $(".addReply").click(function (){
+            modal.modal('show');
+
+            //댓글 입력하는 부분 초기화
+            $('input[name="replyText"]').val('');
+            $('input[name="replyer"]').val('');
+
+            $(".modal-footer .btn").hide(); //모달 내의 모든 버튼 안 보이게
+            $(".replySave, .replyClose").show(); // 필요한 버튼만 보이게
+        });
+        // 댓글 저장
+        $(".replySave").click(function (){
+            var reply = {
+                bno : bno,
+                text : $('input[name="replyText"]').val(),
+                replyer : $('input[name="replyer"]').val()
+            }
+            console.log(reply);
+
+            $.ajax({
+                url : '/replies',
+                method : 'post',
+                data : JSON.stringify(reply),
+                contentType : 'application/json; charset=utf-8',
+                dataType : 'json',
+                success : function (data){
+                    console.log(data);
+                    var newRno = parseInt(data);
+                    alert(newRno+"번 댓글이 등록되었습니다.")
+                    modal.modal('hide');
+                    loadJSONData();
+                }
+            })
+        });
+        // 댓글 수정
+        $(".replyModify").click(function (){
+            var rno = $("input[name='rno']").val();
+            var reply = {
+                rno : rno,
+                bno : bno,
+                text : $('input[name="replyText"]').val(),
+                replyer : $('input[name="replyer"]').val()
+            }
+            console.log(reply);
+            $.ajax({
+                url : '/replies/'+rno,
+                method : 'put',
+                data : JSON.stringify(reply),
+                contentType : 'application/json; charset=utf-8',
+                success : function (result){
+                    console.log("RESULT: "+result);
+                    if(result==='success'){
+                        alert("댓글이 수정되었습니다.");
+                        modal.modal('hide');
+                        loadJSONData();
+                    }
+                }
+            });
+        });
     });
 </script>
 </html>
