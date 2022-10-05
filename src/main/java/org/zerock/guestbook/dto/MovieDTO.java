@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.zerock.guestbook.entity.MovieImage;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,4 +20,13 @@ public class MovieDTO {
 
     @Builder.Default
     private List<MovieImageDTO> imageDTOList = new ArrayList<>();
+
+    //영화릐 평균 평정
+    private double avg;
+
+    //리뷰 수 jpa의 count()
+    private int reviewCnt;
+
+    private LocalDateTime regDate;
+    private LocalDateTime modDate;
 }

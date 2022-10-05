@@ -79,7 +79,7 @@
                 return true;
             }
             $(".custom-file-input").on("change", function (){
-                var fileName = $(this).val().split("\\").pop();
+                var fileName = $(this).val().split("/").pop();
                 $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
                 var formData = new FormData();
                 var inputFile = $(this);
@@ -166,7 +166,7 @@
                 str += "<input type='hidden' name='imageDTOList["+i+"].uuid' value='"+target.data('uuid')+"'>";
             });
             $(".box").html(str);
-            // $("form").submit();
+            $("form").submit();
         });
     </script>
 
