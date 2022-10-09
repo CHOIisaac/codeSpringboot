@@ -37,6 +37,12 @@
         Review Count <span class="badge badge-light">[[${dto.reviewCnt}]]</span>
     </button>
 
+    <button type="button" class="btn btn-info addReviewBtn">Review Register</button>
+
+    <div class="list-group reviewList">
+
+    </div>
+
     <!--    modal-->
     <div class="reviewModal modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -44,7 +50,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title">Movie Review</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times&times;</span>
+                        <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -72,26 +78,57 @@
     </div>
 
     <div class="imageModal modal" tabindex="-2" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Pictures</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 
 </th:block>
 </th:block>
-
+    <script th:src="@{/starrr.js}"></script>
+    <link th:href="@{/css/starrr.css}" rel="stylesheet">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
 <script th:inline="javascript">
     $(document).ready(function() {
-        var bno = [[${dto.mno}]]
-        var listGroup = $(".replyList");
+        var mno = [[${dto.mno}]]
+        var grade = 0;
 
-        function formatTime(str) {
-            var date = new Date(str);
+        $('.starrr').starrr({
+            rating : grade,
+            change : function (e, value){
+                if(value){
+                    console.log(value);
+                    grade = value;
+                }
+            }
+        });
+        // $(".reviewModal").modal("show");
+        var reviewModal = $(".reviewModal");
+        var inputMid = $('input[name="mid"]');
+        var inputText = $('input[name="text"]');
 
-            return date.getFullYear() + '/' +
-                (date.getMonth() + 1) + '/' +
-                date.getDate() + ' ' +
-                date.getHours() + ':' +
-                date.getMinutes();
-        }
+        $(".addReviewBtn").click(function (){
+            inputMid.val("");
+            inputText.val("");
+
+            $(".removeBtn, .modifyBtn").hide();
+            $(".reviewSaveBtn").show();
+            reviewModal.modal('show');
+        });
+
 
         function loadJSONData() {
                 $.getJSON('/replies/board/' + bno, function (arr) {
