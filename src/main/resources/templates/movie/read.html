@@ -27,7 +27,7 @@
 
     <div class="uploadResult">
         <ul>
-            <li th:each="movieImage: ${dto.imageDTOList}">
+            <li th:each="movieImage: ${dto.imageDTOList}" th:data-file="${movieImage.getThumbnailURL()}">
                 <img th:if="${movieImage.path != null}" th:src="|/display?fileName=${movieImage.getThumbnailURL()}|">
             </li>
         </ul>
@@ -148,8 +148,86 @@
             reviewModal.modal('hide');
         });
 
+        function getMovieReivews(){
+            function formatTime(str){
+                var date = new Date(str);
+                return date.getFullYear()+'/'+
+                    (date.getMonth()+1)+'/'+
+                    date.getDate()+'/'+
+                    date.getHours()+':'+
+                    date.getMinutes();
+            }
+            $.getJSON("/reviews/"+mno+"/all", function (arr){
+                var str = "";
+                $.each(arr, function (idx, review){
+                    console.log(review);
+                    str+='  <div class="card-body" data-reviewnum='+review.reviewnum+' data-mid='+review.mid+'>';
+                    str+=' <h5 class="card-title">'+review.text+'<span>'+" "+ review.grade+'</span></h5>';
+                    str+=' <h6 class="card-subtitle mb-2 text-muted">'+review.nickname+'</h6>';
+                    str+=' <p class="card-text">'+formatTime(review.regDate)+'</p>';
+                    str+=' </div>';
+                });
+                $(".reviewList").html(str);
+            });
+        }
+        getMovieReivews();
 
+        var reviewnum;
+        $(".reviewList").on("click", ".card-body", function (){
+            $(".reviewSaveBtn").hide();
+            $(".removeBtn, .modifyBtn").show();
 
+            var targetReview = $(this);
+            reviewnum = targetReview.data("reviewnum");
+            console.log("reviewnum: "+reviewnum);
+            inputMid.val(targetReview.data("mmid"));
+            inputText.val(targetReview.find('.card-title').clone().children().remove().end().text());
+            var grade = targetReview.find('.card-title span').html();
+            $(".starrr a:nth-child("+grade+")").trigger('click');
+            $('.reviewModal').modal('show');
+        });
+
+        $(".modifyBtn").on("click", function (){
+            var data = {reviewnum:reviewnum, mno:mno, grade:grade, text:inputText.val(), mid:inputMid.val()};
+            console.log(data);
+
+            $.ajax({
+                url:'/reviews/'+mno+"/"+reviewnum,
+                type:"PUT",
+                data:JSON.stringify(data),
+                contentType:"application/json; charset=utf-8",
+                dataType: "text",
+                success:function (result){
+                    console.log("result: "+result);
+                    self.location.reload();
+                }
+            });
+            reviewModal.modal('hide');
+        });
+        $(".removeBtn").on("click", function (){
+            var data = {reviewnum:reviewnum};
+            console.log(data);
+
+            $.ajax({
+                url:'/reviews/'+mno+"/"+reviewnum,
+                type:"DELETE",
+                contentType:"application/json; charset=utf-8",
+                dataType: "text",
+                success:function (result){
+                    console.log("result: "+result);
+                    self.location.reload();
+                }
+            });
+            reviewModal.modal('hide');
+        });
+
+        //thumbnail
+        $(".uploadResult li").click(function (){
+            var file = $(this).data('file');
+            console.log("file: "+file);
+            $('.imageModal.modal-body').html("<img style='width:100%' src='/display?fileName="+file+"&size=1'>")
+            $(".imageModal").modal('show');
+        });
     });
 </script>
 </html>

@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewDTO {
-    private Long reviewNum;
+    private Long reviewnum;
     private Long mno;
     private Long mid;
-    private String nickName;
+    private String nickname;
     private String email;
     private int grade;
     private String text;

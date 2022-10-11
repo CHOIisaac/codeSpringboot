@@ -32,7 +32,7 @@ public class ReviewServiceImpl implements ReviewService{
     }
     @Override
     public void modify(ReviewDTO movieReviewDTO){
-        Optional<Review> result = reviewRepository.findById(movieReviewDTO.getReviewNum());
+        Optional<Review> result = reviewRepository.findById(movieReviewDTO.getReviewnum());
 
         if(result.isPresent()){
             Review movieReview = result.get();
