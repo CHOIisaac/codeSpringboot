@@ -100,7 +100,7 @@
 </th:block>
     <script th:src="@{/vendor/starrr.js}"></script>
     <link th:href="@{/css/starrr.css}" rel="stylesheet">
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
 
 <script th:inline="javascript">
     $(document).ready(function() {
@@ -225,7 +225,7 @@
         $(".uploadResult li").click(function (){
             var file = $(this).data('file');
             console.log("file: "+file);
-            $('.imageModal.modal-body').html("<img style='width:100%' src='/display?fileName="+file+"&size=1'>")
+            $('.imageModal .modal-body').html("<img style='width:100%' src='/display?fileName="+file+"&size=1'>")
             $(".imageModal").modal('show');
         });
     });
