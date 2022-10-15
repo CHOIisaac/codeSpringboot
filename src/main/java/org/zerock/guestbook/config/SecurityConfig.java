@@ -25,10 +25,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.logout();
     }
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-        auth.inMemoryAuthentication().withUser("user1")
-                .password("$2a$10$cVig.eg2QOVTFGA3Yjb4MOlMvU7aYyaTXQYuA5a3wEGqNZ/ki2DRa")
-                .roles("USER");
-    }
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
+//        auth.inMemoryAuthentication().withUser("user1")
+//                .password("$2a$10$cVig.eg2QOVTFGA3Yjb4MOlMvU7aYyaTXQYuA5a3wEGqNZ/ki2DRa")
+//                .roles("USER");
+//    }
 }
