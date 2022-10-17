@@ -22,7 +22,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/sample/all").permitAll()
                 .antMatchers("/sample/member").hasRole("USER");
         http.formLogin();
+        http.csrf().disable();
+
+        http.oauth2Login();
     }
+
 //    @Override
 //    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
 //        auth.inMemoryAuthentication().withUser("user1")
