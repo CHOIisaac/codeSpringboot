@@ -10,8 +10,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.zerock.guestbook.security.filter.ApiCheckFilter;
+import org.zerock.guestbook.security.filter.ApiLoginFilter;
 import org.zerock.guestbook.security.handler.CLubLoginSuccessHandler;
 import org.zerock.guestbook.security.service.ClubUserDetailsService;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 @Log4j2
@@ -34,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.logout();
         http.oauth2Login().successHandler(successHandler());
         http.rememberMe().tokenValiditySeconds(60*60*24*7).userDetailsService(userDetailsService);
+        http.addFilterBefore(apiCheckFilter(), UsernamePasswordAuthenticationFilter.class);
     }
     @Bean
     public CLubLoginSuccessHandler successHandler(){
@@ -45,4 +51,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .password("$2a$10$cVig.eg2QOVTFGA3Yjb4MOlMvU7aYyaTXQYuA5a3wEGqNZ/ki2DRa")
 //                .roles("USER");
 //    }
+    @Bean
+    public ApiLoginFilter apiLoginFilter()throws Exception{
+        ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login");
+        apiLoginFilter.setAuthenticationManager(authenticationManager());
+        return apiLoginFilter;
+    }
+
+    @Bean
+    public ApiCheckFilter apiCheckFilter() {
+        return new ApiCheckFilter("/notes/**/*");
+    }
 }
