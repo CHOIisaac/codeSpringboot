@@ -13,8 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.zerock.guestbook.security.filter.ApiCheckFilter;
 import org.zerock.guestbook.security.filter.ApiLoginFilter;
+import org.zerock.guestbook.security.handler.ApiLoginFailHandler;
 import org.zerock.guestbook.security.handler.CLubLoginSuccessHandler;
 import org.zerock.guestbook.security.service.ClubUserDetailsService;
+import org.zerock.guestbook.security.util.JWTUtil;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -53,13 +55,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //    }
     @Bean
     public ApiLoginFilter apiLoginFilter()throws Exception{
-        ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login");
+        ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login", jwtUtil());
         apiLoginFilter.setAuthenticationManager(authenticationManager());
+
+        apiLoginFilter.setAuthenticationFailureHandler(new ApiLoginFailHandler());
+
         return apiLoginFilter;
     }
 
     @Bean
+    public JWTUtil jwtUtil(){
+        return new JWTUtil();
+    }
+
+    @Bean
     public ApiCheckFilter apiCheckFilter() {
-        return new ApiCheckFilter("/notes/**/*");
+        return new ApiCheckFilter("/notes/**/*", jwtUtil());
     }
 }
