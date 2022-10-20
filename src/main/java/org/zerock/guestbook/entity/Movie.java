@@ -2,10 +2,10 @@ package org.zerock.guestbook.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.sound.sampled.Port;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -13,6 +13,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @Getter
 @ToString
+@Table(name = "tbl_movie")
 public class Movie extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,4 +21,13 @@ public class Movie extends BaseEntity{
 
     private String title;
 
+    @Builder.Default
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "movie", cascade = CascadeType.ALL)
+    private List<Poster> posterList = new ArrayList<>();
+
+    public void addPoster(Poster poster) {
+        poster.setIdx(this.posterList.size());
+        poster.setMovie(this);
+        posterList.add(poster);
+    }
 }
